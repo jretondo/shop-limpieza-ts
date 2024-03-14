@@ -211,9 +211,23 @@ const updateCost = (
         .catch(next);
 }
 
+const prodPrices = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    req.body.timer = Number(new Date())
+    Controller.pricesProd(String(req.query.query))
+        .then((dataFact) => {
+            file(req, res, dataFact.filePath, 'application/pdf', dataFact.fileName, dataFact);
+        })
+        .catch(next)
+};
+
 router.get("/details/:id", secure(EPermissions.productos), get);
 router.get("/getCat", secure(EPermissions.productos), getCategorys);
 router.get("/pdf", secure(EPermissions.productos), PDFList);
+router.get("/productPrices", secure(EPermissions.productos), prodPrices)
 router.get("/getGetSubCat", secure(EPermissions.productos), getSubCategorys);
 router.get("/:page", secure(), list);
 router.put("/updateList", secure(EPermissions.productos), updateList);

@@ -10,6 +10,7 @@ import OptimizeImg from '../../../utils/optimeImg';
 import { IJoin, Ipages, IWhere, IWhereParams } from 'interfaces/Ifunctions';
 import { INewProduct } from 'interfaces/Irequests';
 import { IImgProd } from 'interfaces/Itables';
+import { createListPricesPDF } from '../../../utils/facturacion/lists/createListPricesPDF';
 
 export = (injectedStore: typeof StoreType) => {
     let store = injectedStore;
@@ -573,6 +574,36 @@ export = (injectedStore: typeof StoreType) => {
         return await store.update(Tables.PRODUCTS_PRINCIPAL, { precio_compra: cost }, idProd)
     }
 
+    const pricesProd = async (item?: string) => {
+        let filter: IWhereParams | undefined = undefined;
+        let filters: Array<IWhereParams> = [];
+
+        if (item) {
+            const arrayStr = item.split(" ")
+            arrayStr.map(subItem => {
+                filter = {
+                    mode: EModeWhere.like,
+                    concat: EConcatWhere.or,
+                    items: [
+                        { column: Columns.prodPrincipal.name, object: String(subItem) },
+                        { column: Columns.prodPrincipal.subcategory, object: String(subItem) },
+                        { column: Columns.prodPrincipal.category, object: String(subItem) },
+                        { column: Columns.prodPrincipal.short_decr, object: String(subItem) },
+                        { column: Columns.prodPrincipal.cod_barra, object: String(subItem) }
+                    ]
+                };
+                filters.push(filter);
+            })
+        }
+        const products = await store.list(Tables.PRODUCTS_PRINCIPAL, [`${Columns.prodPrincipal.name}`, `FORMAT(${Columns.prodPrincipal.vta_price}, 2) as price`], filters)
+
+        const cajaList: {
+            filePath: string,
+            fileName: string,
+        } = await createListPricesPDF(products)
+
+        return cajaList
+    }
     return {
         list,
         upsert,
@@ -586,6 +617,7 @@ export = (injectedStore: typeof StoreType) => {
         asignarCodBarra,
         updateCost,
         printPDF,
-        updateList
+        updateList,
+        pricesProd
     }
 }
