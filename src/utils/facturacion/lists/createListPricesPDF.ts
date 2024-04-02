@@ -34,14 +34,11 @@ export const createListPricesPDF = async (
                 plantHtml = plantHtml + `
                  <div class="col-md-3" style="height: 120px;padding: 5px;">
                  <div class="row" style="border: 2px solid black; height: 100%;margin-inline: 5px">
-                     <div class="col-md-4" style="padding: 5px;">
-                         <img src="${'data:image/png;base64,' + logo}" style="width: 100%;margin-top: 5px;" />
-                     </div>
-                     <div class="col-md-8">
+                     <div class="col-md-12">
                          <div class="col-md-12" style="height: 85%;">
-                             <h5 style="text-align: center;padding: 0;height: 40px;">
+                             <h3 style="text-align: center;padding: 0;height: 40px;">
                                 ${item.name}
-                             </h5>
+                             </h3>
                          </div>
                          <div class="col-md-12" style="height: 15%;bottom: 0;">
                              <h4 style="text-align: center;padding: 0;">
