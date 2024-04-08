@@ -203,11 +203,8 @@ export = (injectedStore: typeof StoreType) => {
             newFact.cae = factFiscal.CAE
             newFact.vto_cae = new Date(factFiscal.CAEFchVto || "") || new Date()
         }
-        console.log('newFact.forma_pago :>> ', newFact.forma_pago);
         if (Number(newFact.forma_pago) === 2) {
-            console.log('newFact.total_compra  :>> ', newFact.total_compra);
             newFact.total_compra = Number((newFact.total_compra + (newFact.total_fact * 0.08)).toFixed(2))
-            console.log('newFact.total_compra  :>> ', newFact.total_compra);
         }
         const result = await store.insert(Tables.FACTURAS, newFact);
         if (result.affectedRows > 0) {
