@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  centro-drugstore-app-dev:
+    image: node-point-sell-dev:1.0
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - /app/node_modules
+      - ./public:/app/public
+    ports:
+      - '3002:3002'
+    env_file:
+      - .env
