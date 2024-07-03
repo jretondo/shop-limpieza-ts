@@ -212,7 +212,7 @@ const calcProdLista = (
       idAnt = prod.id_prod;
       dataAnt = dataProd;
       let costoExtra = 0;
-      if (Number(medioPago) === 7) {
+      if (Number(medioPago) === 2) {
         costoExtra = Number(dataProd[0].vta_price) * 0.08;
       }
       const totalCosto =
