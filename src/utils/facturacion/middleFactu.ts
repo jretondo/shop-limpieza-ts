@@ -187,7 +187,6 @@ const calcProdLista = (
   productsList: INewFactura['lista_prod'],
   medioPago: number,
 ): Promise<IfactCalc> => {
-  console.log('medioPago :>> ', medioPago);
   let dataAnt: Array<INewProduct> = [];
   let idAnt: number = 0;
   productsList.sort((a, b) => {
@@ -212,11 +211,12 @@ const calcProdLista = (
       }
       idAnt = prod.id_prod;
       dataAnt = dataProd;
+      let costoExtra = 0;
+      if (Number(medioPago) === 7) {
+        costoExtra = Number(dataProd[0].vta_price) * 0.08;
+      }
       const totalCosto =
-        dataProd[0].precio_compra *
-        prod.cant_prod *
-        (Number(medioPago) === 7 ? 1.08 : 1);
-      console.log('totalCosto :>> ', totalCosto);
+        dataProd[0].precio_compra * prod.cant_prod + costoExtra;
       const totalProd = dataProd[0].vta_price * prod.cant_prod;
       const totalNeto = totalProd / (1 + dataProd[0].iva / 100);
       const totalIva = totalNeto * (dataProd[0].iva / 100);
