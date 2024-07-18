@@ -282,6 +282,62 @@ export = (injectedStore: typeof StoreType) => {
     }
   };
 
+  const cajaListDetails = async (
+    filtersQuery: {
+      userId?: number;
+      ptoVta?: number;
+      desde: string;
+      hasta: string;
+      group?: number;
+      proveedor?: string;
+      marca?: string;
+      prodId?: number;
+      cantPerPage?: number;
+    },
+    page: number = 1,
+  ): Promise<any> => {
+    const {
+      userId,
+      ptoVta,
+      desde,
+      hasta,
+      group,
+      prodId,
+      proveedor,
+      marca,
+      cantPerPage = 10,
+    } = filtersQuery;
+
+    const data = await store
+      .rawQuery(
+        `CALL GetFacturasDetailsGrouped('${desde}', '${hasta}', ${
+          proveedor ? `'${proveedor}'` : 'null'
+        }, ${marca ? `'${marca}'` : 'null'}, ${
+          userId ? `'${userId}'` : 'null'
+        }, ${ptoVta ? `'${ptoVta}'` : 'null'}, ${
+          prodId ? `'${prodId}'` : 'null'
+        }, ${group ? `'${group}'` : 'null'}, ${page}, ${cantPerPage});`,
+      )
+      .then((data) => data[1]);
+    const count = await store
+      .rawQuery(
+        `CALL GetFacturasDetailsGroupedCount('${desde}', '${hasta}', ${
+          proveedor ? `'${proveedor}'` : 'null'
+        }, ${marca ? `'${marca}'` : 'null'}, ${
+          userId ? `'${userId}'` : 'null'
+        }, ${ptoVta ? `'${ptoVta}'` : 'null'}, ${
+          prodId ? `'${prodId}'` : 'null'
+        }, ${group ? `'${group}'` : 'null'});`,
+      )
+      .then((data) => data[1].length);
+
+    const pagesObj = await getPages(count, cantPerPage, Number(page));
+    return {
+      data,
+      pagesObj,
+    };
+  };
+
   const get = async (id: number) => {
     return await store.get(Tables.FACTURAS, id);
   };
@@ -822,5 +878,6 @@ export = (injectedStore: typeof StoreType) => {
     getDetFact,
     codigoVerificacionDescuento,
     verificaCodigo,
+    cajaListDetails,
   };
 };
