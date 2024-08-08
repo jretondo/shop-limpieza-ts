@@ -75,14 +75,14 @@ export const invoicePDFMiddle = () => {
           cuit: pvData.cuit,
           ptoVta: pvData.pv,
           tipoCmp: newFact.t_fact,
-          nroCmp: dataFiscal.CbteDesde,
+          nroCmp: newFact.cbte,
           importe: newFact.total_fact,
           moneda: 'PES',
           ctz: 0,
           tipoDocRec: newFact.tipo_doc_cliente,
           nroDocRec: newFact.n_doc_cliente,
           tipoCodAut: 'E',
-          codAut: dataFiscal.CAE,
+          codAut: newFact.cae,
         };
 
         const factDataStr = JSON.stringify(factData);
@@ -110,7 +110,7 @@ export const invoicePDFMiddle = () => {
           factNro: pvStr + '-' + nroStr,
           fechaFact: moment(newFact.fecha, 'YYYY-MM-DD').format('DD/MM/YYYY'),
           letra: newFact.letra,
-          codFact: zfill(dataFiscal.CbteTipo, 2),
+          codFact: zfill(newFact.t_fact, 2),
         };
         if (
           dataFiscal.CbteTipo === CbteTipos['Nota de Crédito A'] ||
@@ -134,14 +134,11 @@ export const invoicePDFMiddle = () => {
           logoAfip1: 'data:image/png;base64,' + lAfip1,
           logoAfip2: 'data:image/png;base64,' + lAfip2,
           codQR: urlQr,
-          caeNro: dataFiscal.CAE || '',
-          caeVto: moment(dataFiscal.CAEFchVto, 'YYYY-MM-DD').format(
-            'DD/MM/YYYY',
-          ),
+          caeNro: newFact.cae || '',
+          caeVto: moment(newFact.vto_cae, 'YYYY-MM-DD').format('DD/MM/YYYY'),
           vendedor: newFact.seller_name,
         };
       }
-
       const myCss = fs.readFileSync(
         path.join('public', 'css', 'style.css'),
         'utf8',
@@ -283,7 +280,7 @@ export const invoicePDFMiddle = () => {
             path: filePath,
             format: 'A4',
             landscape: false,
-            scale: 0.9,
+            scale: 0.8,
             displayHeaderFooter: false,
             margin: {
               top: '0.5cm',
