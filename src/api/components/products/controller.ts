@@ -772,6 +772,10 @@ export = (injectedStore: typeof StoreType) => {
       fileName: string;
     } = await createListPricesPDF(products);
 
+    setTimeout(() => {
+      fs.unlinkSync(cajaList.filePath);
+    }, 5000);
+
     return cajaList;
   };
   return {
