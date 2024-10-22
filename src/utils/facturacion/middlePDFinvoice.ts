@@ -139,6 +139,7 @@ export const invoicePDFMiddle = () => {
           vendedor: newFact.seller_name,
         };
       }
+
       const myCss = fs.readFileSync(
         path.join('public', 'css', 'style.css'),
         'utf8',
