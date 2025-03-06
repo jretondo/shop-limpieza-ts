@@ -132,9 +132,9 @@ const devFactMiddle = () => {
         ImpTotConc: 0,
         ImpNeto: -newFact.total_neto,
         ImpOpEx: 0,
-        ImpIVA: -newFact.total_iva,
+        ImpIVA: 0,
         ImpTrib: 0,
-        Iva: ivaList,
+        Iva: undefined,
         CbtesAsoc: [
           {
             Tipo: dataFact[0].t_fact,
